@@ -1,6 +1,8 @@
 #include<LiquidCrystal.h>
 
-#include "gowno.c"
+#include "interrupt.c"  // Andrzej
+#include "matma.c"      // Kajetan
+#include "display.c"    // Jakub
 
 int rs=7;
 int en=8;
