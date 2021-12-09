@@ -1,5 +1,7 @@
 #include<LiquidCrystal.h>
 
+#include "gowno.c"
+
 int rs=7;
 int en=8;
 int d4=9;
