@@ -16,6 +16,5 @@ void loop()
 {
 lcd.setCursor(0,0); 
 lcd.print("Obroty/minute: "); 
-lcd.print(analogRead(wynik));
-delay(500); 
+lcd.print(analogRead(wynik)); 
 }
