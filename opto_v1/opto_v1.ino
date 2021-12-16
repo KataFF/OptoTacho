@@ -1,4 +1,4 @@
-#include<LiquidCrystal.h>
+#include <LiquidCrystal.h>
 
 #include "interrupt.h"  // Andrzej
 #include "matma.c"      // Kajetan
