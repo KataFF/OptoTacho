@@ -1,6 +1,6 @@
 #include<LiquidCrystal.h>
 
-#include "interrupt.c"  // Andrzej
+#include "interrupt.h"  // Andrzej
 #include "matma.c"      // Kajetan
 #include "display.c"    // Jakub
 
