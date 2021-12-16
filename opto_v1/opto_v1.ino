@@ -13,7 +13,7 @@
 #define ledPin 13
 
 volatile int i = 0;
-unsigned long rpmtime;
+unsigned int rpmtime;
 float rpmfloat;
 unsigned int rpm;
 
@@ -21,6 +21,7 @@ unsigned int rpm;
 volatile byte state = LOW;
 LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
 
+#include "global.h"
 #include "interrupt.h"  // Andrzej
 #include "matma.c"      // Kajetan
 //include "display.c"    // Jakub
