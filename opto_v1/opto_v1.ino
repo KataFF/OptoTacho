@@ -1,6 +1,5 @@
 #include <LiquidCrystal.h>
 
-int rs=7;
 //PINY od LCD
 #define rs 7
 #define en 8
