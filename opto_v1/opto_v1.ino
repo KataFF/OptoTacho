@@ -22,7 +22,7 @@ volatile byte state = LOW;
 LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
 
 #include "global.h"
-#include "interrupt.h"  // Andrzej
+#include "interrupt.c"  // Andrzej
 #include "matma.c"      // Kajetan
 //include "display.c"    // Jakub
 

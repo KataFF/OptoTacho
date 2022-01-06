@@ -1,8 +1,8 @@
 #include "interrupt.h"
 #define interruptPin 2
 #define Vref 180 // 4,5V/5V * 1024 = 
-
-_Bool tooslow = 1;
+//volatile j = 0;
+bool tooslow = 1;
 
 ISR(TIMER1_OVF_vect) {
  //kiedy cos kreci sie za wolno, i mamy timer overflow
@@ -21,12 +21,14 @@ void przerwanie() {
       {
       rpmtime = TCNT1; //wartość z licznika
       TCNT1 = 0; //zerowanie flagi
+      /*
       Serial.print("x ");
       Serial.print(j);
       Serial.print("  ");
       Serial.print(analogRead(analog_pin));
       Serial.println();
       j++;
+      */
       }
   
   
