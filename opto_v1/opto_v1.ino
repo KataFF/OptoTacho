@@ -85,11 +85,14 @@ float obliczRPM(unsigned int rpmtime)
 void wyswietlInit()
 {
   lcd.setCursor(0,0); //postawienie kursora w lewym gornym rogu LCD 
-  lcd.write("Inicjalizacja"); //wyswietl komunikat
-  lcd.setCursor(0,1); //postawienie kursora w drugiej linijce
-  lcd.write("zakończona"); //wyswietl komunikat
-  delay(1000); //poczekaj
-  lcd.clear(); //odswiez
+  lcd.write("Inicjalizacja..."); //wyswietl komunikat
+  for(int i=0; i<16;i++) //LCD ma 16 znaków w jednym wierszu
+  {
+    lcd.setCursor(i,1); // wyswietl kropke w kazdym wierszu
+    lcd.write(".");
+    delay(100); //co 100 ms
+  }
+  delay(1000); //odczekaj sekunde
 }
 
 void wyswietlZaWolno()
