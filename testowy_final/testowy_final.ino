@@ -40,7 +40,7 @@ void setup() {
   TIMSK1 |= (1 << TOIE1); //enable timer overflow
   
   lcd.begin(16,2);
-  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), przerwanie, FALLING);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), przerwanie, FALLING); //konfiguracja przerwania
   lcd.clear();
 
 }

@@ -1,52 +1,112 @@
 #include <LiquidCrystal.h>
 
 //PINY od LCD
-#define rs 7
-#define en 8
-#define d4 9
-#define d5 10
-#define d6 11
-#define d7 12
+#define RS A0
+#define EN A2
+#define D4 A3
+#define D5 A4
+#define D6 11
+#define D7 3
 
-#define analog_pin A5
-#define interruptPin 2
-#define ledPin 13
+#define ANALOG_PIN A7
+#define INTERRUPT_PIN 2
+#define LED_PIN 13
 
-volatile int i = 0;
+#define VREF 100
+
 unsigned int rpmtime;
-float rpmfloat;
-unsigned int rpm;
+float rpm;
+bool tooslow;
 
+LiquidCrystal lcd(RS,EN,D4,D5,D6,D7);
 
-volatile byte state = LOW;
-LiquidCrystal lcd(rs,en,d4,d5,d6,d7);
-
-#include "global.h"
-#include "interrupt.c"  // Andrzej
-#include "matma.c"      // Kajetan
-//include "display.c"    // Jakub
-
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  pinMode(interruptPin, INPUT);
+  pinMode(INTERRUPT_PIN, INPUT);
   //setup licznika
   TCCR1A = 0;
   TCCR1B = 0;
-  TCCR1B |= (1 << CS12); //Prescaler 256
+  TCCR1B |= (1 << CS12) | (1<<CS10); //Prescaler 1024
   TIMSK1 |= (1 << TOIE1); //enable timer overflow
   
-  lcd.begin(16,2);
-  attachInterrupt(digitalPinToInterrupt(interruptPin), przerwanie, FALLING);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), przerwanie, FALLING); //konfiguracja przerwania
+
+  lcd.begin(16,2); //konfiguracja LCD
   lcd.clear();
+  wyswietlInit();
 }
 
-void loop() {
-  digitalWrite(ledPin, state);
+void loop()
+{
+  lcd.clear();
+  if (tooslow == 1)
+  {
+    wyswietlZaWolno();
+  }
+  else
+  {
+    obliczRPM(rpmtime);
+    wyswietlRpm(rpm);
+  }
 }
-/*
-void blink() {
-  Serial.write("X; i=");
-  Serial.write(i);
-  Serial.println("");
-  i++;
-}*/
+
+
+ISR(TIMER1_OVF_vect)
+{
+ //kiedy cos kreci sie za wolno, i mamy timer overflow
+  tooslow = 1;
+}
+
+
+void przerwanie() 
+{
+  if(analogRead(ANALOG_PIN) < VREF)
+  {
+  rpmtime = TCNT1; //wartość z licznika
+  TCNT1 = 0; //zerowanie flagi
+  tooslow = 0; //zerowanie flagi timer overflow
+  }
+}
+
+
+// Przeliczanie czasu z licznika na wynik w RPM - by Kajetan Wierszelis 16.12.2021r
+// Zalozono zegar 16 MHz / prescaler 1024 =  15 625 Hz czest przerwania
+// czyli 1 tick = 64 us... ok
+float obliczRPM(unsigned int rpmtime)
+{
+  float obliczone = 0;
+  // obliczone = 10^6 / (rpmtime * 64); // *64 to po prostu 2^6 czyli 6 bitshiftów w lewo
+  // inaczej obliczone = 10^6/64 / rpmtime;
+  obliczone = rpmtime / 15625; //baka, przecież to tak proste xd i wszystko sie miesci w 2 bajtach
+  return obliczone;
+}
+
+void wyswietlInit()
+{
+  lcd.setCursor(0,0); //postawienie kursora w lewym gornym rogu LCD 
+  lcd.write("Inicjalizacja"); //wyswietl komunikat
+  lcd.setCursor(0,1); //postawienie kursora w drugiej linijce
+  lcd.write("zakończona"); //wyswietl komunikat
+  delay(1000); //poczekaj
+  lcd.clear(); //odswiez
+}
+
+void wyswietlZaWolno()
+{
+    lcd.setCursor(0,0); //postawienie kursora w lewym gornym rogu LCD 
+    lcd.write("Za wolno"); //wyswietl komunikat
+    delay(100); //poczekaj
+    lcd.clear(); //odswiez
+}
+
+void wyswietlRpm(float rpm)
+{
+lcd.clear();    //czyszczenie ekranu z wszelkich pozostałości
+lcd.setCursor(0,0); //postawienie kursora w lewym gornym rogu LCD 
+lcd.write("RPM: ");  // wyswietlenie 1. linijki tekstu
+lcd.setCursor(0,1); //postawienie kursora w drugiej linijce
+lcd.print(rpm); //wypisz wynik
+delay(500); //delay zeby moc odczytac wynik
+lcd.clear(); //po pół sekundy odśwież
+}
