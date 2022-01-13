@@ -55,8 +55,7 @@ void loop() {
     delay(50);
   }
   else {
-    float obliczRPM(rpmtime);
-    rpm = round(rpmtime);
+    rpm = obliczRPM(rpmtime);
 
     Serial.print(rpm);
     Serial.print("  ");
@@ -82,12 +81,16 @@ ISR(TIMER1_OVF_vect) {
 
 void przerwanie() 
 {
-if(analogRead(ANALOG_PIN) < VREF)
-{
-rpmtime = TCNT1; //wartość z licznika
-TCNT1 = 0; //zerowanie flagi
- tooslow = 0; //zerowanie flagi timer overflow
-}
+  unsigned short odczytADC;
+  odczytADC = analogRead(ANALOG_PIN);
+  Serial.write("Przerwanie z D2! Wartosc ADC: ");
+  Serial.println(odczytADC);
+  if(odczytADC < VREF)
+  {
+    rpmtime = TCNT1; //wartość z licznika
+    TCNT1 = 0; //zerowanie flagi
+    tooslow = 0; //zerowanie flagi timer overflow
+  }
 }
 /*
 {
@@ -107,6 +110,7 @@ float obliczRPM(unsigned int rpmtime) {
   float obliczone = 0;
   // obliczone = 10^6 / (rpmtime * 64); // *64 to po prostu 2^6 czyli 6 bitshiftów w lewo
   // inaczej obliczone = 10^6/64 / rpmtime;
-  obliczone = rpmtime / 15625; //baka, przecież to tak proste xd i wszystko sie miesci w 2 bajtach
+  obliczone = 15625 / rpmtime; //baka, przecież to tak proste xd i wszystko sie miesci w 2 bajtach
+  obliczone *= 60;
   return obliczone;
 }
