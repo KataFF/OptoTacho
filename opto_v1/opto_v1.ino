@@ -18,12 +18,11 @@ unsigned int rpmtime;
 float rpm;
 bool tooslow;
 
+
 LiquidCrystal lcd(RS,EN,D4,D5,D6,D7);
 
 void setup()
 {
-  Serial.begin(9600);
-  pinMode(INTERRUPT_PIN, INPUT);
   //setup licznika
   TCCR1A = 0;
   TCCR1B = 0;
@@ -46,7 +45,7 @@ void loop()
   }
   else
   {
-    obliczRPM(rpmtime);
+    rpm = obliczRPM(rpmtime);
     wyswietlRpm(rpm);
   }
 }
@@ -78,7 +77,9 @@ float obliczRPM(unsigned int rpmtime)
   float obliczone = 0;
   // obliczone = 10^6 / (rpmtime * 64); // *64 to po prostu 2^6 czyli 6 bitshiftów w lewo
   // inaczej obliczone = 10^6/64 / rpmtime;
-  obliczone = rpmtime / 15625; //baka, przecież to tak proste xd i wszystko sie miesci w 2 bajtach
+  obliczone = 15625.0 / rpmtime;
+  // Poniewaz powyszsza wartosc jest w Hertzach/Rotations Per Second, to
+  obliczone *= 60;
   return obliczone;
 }
 
