@@ -93,13 +93,13 @@ void wyswietlInit()
     lcd.write(".");
     delay(100); //co 100 ms
   }
-  delay(200); //odczekaj sekunde
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.write("Inicjalizacja");
-  lcd.setCursor(1,5);
-  lcd.write("zakończona");
-  delay(1000);
+  delay(200); //odczekaj 
+  lcd.clear(); //wyczysc
+  lcd.setCursor(0,0); //kursor w lewym gornym rogu
+  lcd.write("Inicjalizacja"); //wyswietl komunikat
+  lcd.setCursor(1,5); //kursor na srodku dolnego wiersza
+  lcd.write("zakończona"); //wyswietl komunikat
+  delay(1000); //odczekaj
 }
 
 void wyswietlZaWolno()
