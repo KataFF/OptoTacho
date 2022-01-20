@@ -98,7 +98,7 @@ void wyswietlInit()
   lcd.setCursor(0,0); //kursor w lewym gornym rogu
   lcd.write("Inicjalizacja"); //wyswietl komunikat
   lcd.setCursor(1,5); //kursor na srodku dolnego wiersza
-  lcd.write("zakończona"); //wyswietl komunikat
+  lcd.write("zakonczona"); //wyswietl komunikat
   delay(1000); //odczekaj
 }
 
