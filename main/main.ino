@@ -89,7 +89,7 @@ void wyswietlInit()
   lcd.write("Inicjalizacja..."); //wyswietl komunikat
   for(int i=0; i<16;i++) //LCD ma 16 znaków w jednym wierszu
   {
-    lcd.setCursor(i,1); // wyswietl kropke w kazdym wierszu
+    lcd.setCursor(i,1); // wyswietl kropke w kazdej kolumnie
     lcd.write(".");
     delay(100); //co 100 ms
   }
